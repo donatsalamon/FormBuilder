@@ -1,0 +1,140 @@
+﻿@model formBuilder.ViewModel.CreateSheetVM
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>QuestionSheet</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+
+                <input type="hidden" asp-for="@Model.question.Id" />
+                <label asp-for="@Model.question.Question" class="control-label"></label>
+                <input asp-for="@Model.question.Question" class="form-control" />
+                <span asp-validation-for="@Model.question.Question" class="text-danger"></span>
+
+                <select asp-for="@Model.question.questionType">
+                    <option value="decide">Yes/No</option>
+                    <option value="textBased">Text based answer</option>
+                </select>
+            </div>
+            <div>
+                <label>If you need to write any description type it here</label>
+                <input asp-for="@Model.question.AddedDescription" class="form-control" />
+            </div>
+            <div>
+                <input type="hidden" value="@Model.question.FormId" asp-for="@Model.question.FormId" class="form-control" />
+                <input type="hidden" value="@Model.question.formName" asp-for="@Model.question.formName" class="form-control" />
+            </div>
+            <div>
+                <select onchange="Change('selection','everythingExceptChild','everythingExceptParent','parentOnly','statementDiv'/*,'childOnly'*/)" id="selection" asp-for="@Model.question.typeOfQuestion">
+                    <option value="only">Only</option>
+                    <option value="parent">Parent</option>
+                    <option value="parentChild">Parent/Child</option>
+                    <option value="child">Child</option>
+                </select>
+            </div>
+
+            @*IF PARENT IS PICKED YOU HAVE TO SET THE CHILD*@
+            @*IF PARENT-CHILD IS PICKED YOU HAVE TO PICK A PARENT AND A CHILD QUESTION AS WELL*@
+            @*HAVE TO MAKE DROPDOWN FOR EACH SOLUTION BECAUSE WHERE TO SAVE THE INPUT IS DIFFERENT*@
+
+            @*------------> PARENT SECTION<-----------*@
+            <div id="parentOnly" hidden>
+                <p>Pick the ParentChild/Child question -> Only parent</p>
+                <select asp-for="@Model.question.childQuestionId" asp-items="@Model.everythingExceptParent" class="form-select">
+                    <option disabled selected>--Select Question--</option>
+                </select>
+            </div>
+            @*------------>END OF PARENT SECTION<------------*@
+
+
+            @*------------> PARENT-CHILD SECTION<-----------*@
+            <div id="everythingExceptChild" hidden>
+               @* <p>Pick the ParentChil/Child question -> this is the parent</p>
+                <select asp-for="@Model.question.parentQuestionId" asp-items="@Model.everythingExceptChild" class="form-select">
+                    <option disabled selected>--Select Question--</option>
+                </select>*@
+            </div>
+            <div id="everythingExceptParent" hidden>
+                <p>Pick the ParentChild/Child question -> this is the Child</p>
+                <select asp-for="@Model.question.childQuestionId" asp-items="@Model.everythingExceptParent" class="form-select">
+                    <option disabled selected>--Select Question--</option>
+                </select>
+            </div>
+            @*------------>END OF PARENT-CHILD SECTION<------------*@
+
+
+            @*------------> CHILD SECTION<-----------*@
+              @* <div id="childOnly" hidden>
+                <p>Pick the ParentChild/Child question -> Only child</p>
+                <select asp-for="@Model.question.parentQuestionId" asp-items="@Model.everythingExceptChild" class="form-select">
+                    <option disabled selected>--Select Question--</option>
+                </select>
+            </div> *@
+            @*------------>END OF CHILD SECTION<------------*@
+
+
+            @*------------> STATEMENT SECTION<-----------*@
+
+            <div id="statementDiv" hidden>
+               @* <p>Choose the type of the Statement</p>
+                <select asp-for="@Model.question.StatementId" asp-items="@Model.StatementList" class="form-select">
+                    <option disabled selected>--Select Question--</option>
+                </select>*@
+            </div>
+
+             @*------------>END OF STATEMENT SECTION<------------*@
+
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function Change(IdSelection, parent, child, parentOnly,statement/*,childOnly*/) {
+        var ddl = document.getElementById(IdSelection);
+        var selectedValue = ddl.options[ddl.selectedIndex].value;
+        var parentDiv = document.getElementById(parent);
+        var childDiv = document.getElementById(child);
+        var parentOnlyDiv = document.getElementById(parentOnly);
+        var statementOnlyDiv = document.getElementById(statement);
+        //var childOnlyDiv = document.getElementById(childOnly);
+        if (selectedValue == "parent") {
+            parentOnlyDiv.hidden = false;
+            childDiv.hidden = true;
+            parentDiv.hidden = true;
+            statementOnlyDiv.hidden = false;
+            //childOnlyDiv.hidden = true;
+        }
+        else if (selectedValue == "parentChild") {
+            childDiv.hidden = false;
+            parentDiv.hidden = false;
+            parentOnlyDiv.hidden = true;
+            statementOnlyDiv.hidden = false;
+            //childOnlyDiv.hidden = true;
+        }
+        else if (selectedValue == "child") {
+            childDiv.hidden = true;
+            parentDiv.hidden = true;
+            parentOnlyDiv.hidden = true;
+            statementOnlyDiv.hidden = true;
+            //childOnlyDiv.hidden = false;
+        }
+        else {
+            childDiv.hidden = true;
+            parentDiv.hidden = true;
+            parentOnlyDiv.hidden = true;
+            statementOnlyDiv.hidden = true;
+            //childOnlyDiv.hidden = true;
+        }
+    }
+</script>

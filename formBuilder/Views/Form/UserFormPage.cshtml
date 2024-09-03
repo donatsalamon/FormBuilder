@@ -1,0 +1,48 @@
+﻿@model List<formBuilder.Models.QuestionSheet>
+
+
+<h1>Sheet</h1>
+@{
+    if (@Model[0].FormId == 0)
+    {
+        <p>This form is empty</p>
+    }
+    else
+    {
+        <p>
+            <a asp-route-id="@Model[0].FormId" asp-controller="QuestionSheet" asp-action="Fill">Fill the Sheet</a>
+        </p>
+
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        Question
+                    </th>
+                    <th>
+                        Type of the Qeustion
+                    </th>
+                    <th>
+                        Added Description
+                    </th>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Question)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.questionType)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AddedDescription)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}

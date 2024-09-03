@@ -1,0 +1,22 @@
+﻿@model List<Answer>
+
+<h1>Filled QuestionSheet Page</h1>
+
+<form asp-action="Answers">
+    @{
+        List<string> listOfQuestionSheetNames = new List<string>();
+        for (int i = 0; i < Model.Count(); i++)
+        {
+            if(!listOfQuestionSheetNames.Contains(Model[i].nameOfTheQuestionSheet))
+            {
+                listOfQuestionSheetNames.Add(Model[i].nameOfTheQuestionSheet);
+            }
+        }
+    }
+    @foreach (var item in listOfQuestionSheetNames)
+    {
+        <div>
+            <a asp-action="Check" asp-route-name="@item">@item</a>
+        </div>
+    }
+</form>

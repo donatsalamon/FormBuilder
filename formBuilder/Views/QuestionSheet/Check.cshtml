@@ -1,0 +1,39 @@
+﻿@model formBuilder.ViewModel.AnswerVM
+
+<form asp-action="Check">
+    @*@model IEnumerable<formBuilder.Models.Answer>*@
+<h1>@Model.AnswersList[0].nameOfTheQuestionSheet filled by @Model.User[0]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Answers
+            </th>
+
+            <th>
+                Question
+            </th>
+            <th>
+                Added Description
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@for (int i = 0; i < @Model.AnswersList.Length; i++)
+{
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => Model.AnswersList[i].textAnswer)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => Model.Questions[i])
+            </td>
+             <td>
+                @Html.DisplayFor(modelItem => Model.AnswersList[i].UsersDescription)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+</form>

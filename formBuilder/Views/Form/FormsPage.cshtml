@@ -1,0 +1,43 @@
+﻿@*@model IEnumerable<formBuilder.Models.Form>*@
+@model List<formBuilder.Models.Form>
+
+<p>Forms</p>
+
+<form asp-controller="Form" asp-action="FormsPage" method="get">
+    Filter: <input type="text" name="Searchstring" />
+    <input type="submit" value="Filter" />
+</form>
+
+
+<table class="table" id="datatblForUserFormPage">
+    <thead>
+        <tr>
+            <th>
+                id
+            </th>
+            <th>
+                nameOftheForm
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.nameOftheForm)
+                </td>
+                <td>
+                    <a asp-controller="Form" asp-action="UserFormPage" asp-route-id="@item.Id">Show Sheet</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@*@section Scripts{
+    <script src="~/js/Add.js"></script>
+}*@

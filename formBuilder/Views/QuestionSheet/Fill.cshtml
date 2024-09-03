@@ -1,0 +1,107 @@
+﻿@model formBuilder.ViewModel.SheetVM
+
+<form id="bigForm" asp-action="Fill" method="post">
+
+    <main class="content">
+        <div class="container-fluid text-center p-0">
+            <h1 class="h3 mb-3">Name of the QuestionSheet</h1>
+            <div class="row">
+                <div class="col-sm-12 col-lg-7 text-start mx-auto">
+                    <div class="card h-100">
+
+                        <input class="form-control form-control-lg" id="inputId" asp-for="@Model.sheetName" onchange="textBoxISNull(document.getElementById('inputId').value,'nextBtn')" class="form-control" />
+                        <div class="d-grid gap-2 d-md-block" @*style="margin: 0 auto;"*@>
+                            <button class="btn btn-primary" type="button" id="nextBtn" disabled onclick="makeappear('divId')">Next</button>
+                        </div>
+                        <div id="divId" class="container-fluid text-center p-0" hidden>
+                            @for (int i = 0; i < Model.QuestionSheetList.Count; i++)
+                            {
+                                <div class="card-header">
+                                    <h6 class="card-subtitle text-muted">@(i+1) . @Model.QuestionSheetList[i].Question</h6>
+                                </div>
+                                <br>
+                                @if (@Model.QuestionSheetList[i].questionType == "decide")
+                                {
+                                    <input class="form-control form-control-lg" hidden asp-for="@Model.AnswersList[i].UserTableId" value="@Model.User">
+                                    <input class="form-control form-control-lg" hidden asp-for="@Model.AnswersList[i].QuestionId" value="@Model.QuestionSheetList[i].Id">
+
+                                    <select asp-for="@Model.AnswersList[i].textAnswer">
+                                        <option value="True">Yes</option>
+                                        <option value="False">No</option>
+                                    </select>
+                                }
+                                else
+                                {
+                                    @* We set the userId here*@
+                                    <input hidden asp-for="@Model.AnswersList[i].UserTableId" value="@Model.User">
+                                    @*We set the QuestionId here*@
+                                    <input hidden asp-for="@Model.AnswersList[i].QuestionId" value="@Model.QuestionSheetList[i].Id">
+                                    //we set the name of the questionsheet as well
+                                    <input hidden asp-for="@Model.AnswersList[i].nameOfTheQuestionSheet" value="@Model.sheetName">
+                                    <input asp-for="@Model.AnswersList[i].textAnswer" class="form-control form-control-lg" />
+                                }
+                                <div>
+                                    <br />
+                                    <label>Score for the answer:</label>
+                                    <select asp-for="@Model.AnswersList[i].Score">
+                                        <option value="1">1 -> Failed</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5 -> Perfect</option>
+                                    </select>
+                                    <br/>
+                                    <label>Show added description</label>
+                                    <input class="form-check-input" type="radio" id="show@(i)" name="choiceAnswer@(i)" onclick="Show('@(i)','hide@(i)','show@(i)')">
+                                    <label>Hide added description</label>
+                                    <input class="form-check-input" onclick="Show('@(i)','hide@(i)','show@(i)')" checked type="radio" id="hide@(i)" name="choiceAnswer@(i)">
+
+                                </div>
+                                <div>
+                                    <label>Want to add some comment</label>
+                                    <input class="form-check-input" onclick="Show('txtBox@(i)','inputHide@(i)','inputShow@(i)')" type="radio" id="inputShow@(i)" name="inputData@(i)">
+                                    <label>Doesnt need comment</label>
+                                    <input class="form-check-input" onclick="Show('txtBox@(i)','inputHide@(i)','inputShow@(i)')" checked type="radio" id="inputHide@(i)" name="inputData@(i)">
+                                </div>
+                                <input id="txtBox@(i)" hidden asp-for="@Model.AnswersList[i].UsersDescription" class="form-control form-control-lg" />
+                                <label id="@(i)" hidden>Added note: @Model.QuestionSheetList[i].AddedDescription</label>
+                                <br>
+                            }
+                            <input type="submit" value="Fill" class="btn btn-primary btn-md" style="float: right;" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</form>
+
+<script>
+    function Show(labelId, hideId, showId) {
+        var chkNo = document.getElementById(hideId);
+        var chkYes = document.getElementById(showId);
+        var label = document.getElementById(labelId);
+        if (chkNo.checked == true) {
+
+            label.hidden = true;
+        }
+        if (chkYes.checked == true) {
+            label.hidden = false;
+        }
+    }
+</script>
+
+<script>
+    function makeappear(divId) {
+        var div = document.getElementById(divId);
+        div.hidden = false;
+    }
+</script>
+
+<script>
+    function textBoxISNull(inputId, next) {
+        if (inputId != null) {
+            document.getElementById(next).disabled = false;
+        }
+    }
+</script>

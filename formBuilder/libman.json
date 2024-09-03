@@ -1,0 +1,10 @@
+{
+  "version": "1.0",
+  "defaultProvider": "unpkg",
+  "libraries": [
+    {
+      "library": "adminkit/core@3.3.0",
+      "destination": "C:\\Users\\c151158\\Desktop\\adminkit"
+    }
+  ]
+}
